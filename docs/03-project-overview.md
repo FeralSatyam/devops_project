@@ -23,6 +23,7 @@ The current storefront is static and does not use the review API; the API and da
 ```
 docker/
 ├── docker-compose.yml   # runs frontend + backend + MongoDB together
+├── infra/               # CloudFormation template for the EC2 deployment
 ├── README.md
 ├── docs/                # step-by-step guides (this folder)
 ├── frontend/            # React site (Vite), served by nginx

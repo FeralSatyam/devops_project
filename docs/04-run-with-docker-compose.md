@@ -4,14 +4,16 @@ Build and start the full stack (frontend, backend, and MongoDB) with a single co
 
 ## Get the Project onto the Server
 
-On the EC2 instance, clone the repository and move into it:
+For a manual deployment, clone the repository on the EC2 instance and move into it:
 
 ```bash
-git clone https://github.com/Sammy4447/docker_II.git
-cd docker_II
+git clone https://github.com/FeralSatyam/devops_project.git
+cd devops_project
 ```
 
 > Git comes preinstalled on the Ubuntu AMI. If `git` is not found, install it with `sudo apt install git`.
+
+The GitHub Actions deployment transfers the checked-out project to EC2 automatically, so cloning is not needed for workflow deployments.
 
 ## Start Everything
 
@@ -32,7 +34,7 @@ docker compose up -d --build
 - **Locally:** `http://localhost`
 - **On EC2:** `http://<instance-public-ip>`
 
-Scroll down to the **Reviews** section and post a review.
+The panipuri storefront is served at the root URL. The review API runs as a separate backend service.
 
 ## Check Status and Logs
 

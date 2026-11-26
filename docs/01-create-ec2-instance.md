@@ -2,6 +2,8 @@
 
 Launch an Ubuntu server on AWS to host the Dockerized app.
 
+For automated deployment, you do not need to create an instance manually: configure the AWS Actions secrets described in the [README](../README.md), then push to `main` or run the GitHub Actions workflow. It creates the network and EC2 instance from `infra/ec2-instance.yaml`.
+
 ## Steps
 
 1. Go to **AWS Console → EC2 → Launch Instance**.
