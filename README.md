@@ -1,6 +1,6 @@
-# Momo Site — Dockerized Full-Stack App
+# Pani Puri House — Dockerized Shop
 
-A review site built from a Vite + React frontend (served by nginx), a Node/Express backend, and a MongoDB database. Each part runs in its own container, and Docker Compose runs them together. The app is deployed on an AWS EC2 instance.
+A panipuri shop landing page built with Vite + React and served by nginx. Docker Compose also starts the existing Node/Express review API and MongoDB services. The storefront is static; the API is available for future review features.
 
 ## Guides
 
@@ -23,6 +23,8 @@ docker compose up -d --build
 ```
 
 Then open `http://localhost` (or `http://<instance-public-ip>` on EC2).
+
+Run the frontend checks locally with `cd frontend && npm ci && npm test && npm run build`. The GitHub Actions workflow runs those checks and builds the Docker images.
 
 ## Command Cheat Sheet
 

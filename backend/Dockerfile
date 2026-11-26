@@ -4,11 +4,11 @@ FROM node:20-alpine
 WORKDIR /app
 # sets /app as the working directory inside the container for all commands below
 
-COPY package.json ./
+COPY package.json package-lock.json ./
 # copy only the dependency file first so Docker caches this layer and skips "npm install" on rebuilds
 # where only server.js/other source changed, not package.json
 
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 # a production backend usually needs packages like express and mongoose, but not development tools like jest or nodemon (not installing dev dependencies)
 
 COPY . .

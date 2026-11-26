@@ -1,20 +1,22 @@
 # 03 — Project Overview
 
-The app is a review site with three parts. Each part runs in its own container:
+The app is a panipuri shop landing page, served alongside the existing review API stack. Each part runs in its own container:
 
-- a Vite + React frontend, served by nginx
-- a Node/Express backend
-- a MongoDB database
+- a Vite + React storefront, served by nginx
+- a Node/Express review API
+- a MongoDB database for reviews
 
 ## Architecture
 
 | Container | Role | Port |
 |---|---|---|
-| `momo-frontend` | nginx serves the built React site and forwards `/api/*` requests to the backend | `80` on the host → `80` in the container |
+| `momo-frontend` | nginx serves the built panipuri storefront and forwards `/api/*` requests to the backend | `80` on the host → `80` in the container |
 | `momo-backend` | Express API: `GET /api/reviews` lists reviews, `POST /api/reviews` saves one (`name` + `review`) | Internal only (`5000`) |
-| `momo-mongo` | MongoDB database (official `mongo:7` image) that stores the reviews | Internal only (`27017`) |
+| `momo-mongo` | MongoDB database (official `mongo:7` image) that stores reviews | Internal only (`27017`) |
 
 Only the frontend is published to the host. The backend and database are reachable only inside the Docker network that Compose creates. On that network, containers find each other by service name (`backend`, `mongo`).
+
+The current storefront is static and does not use the review API; the API and database remain in Compose for future review features.
 
 ## Project Structure
 

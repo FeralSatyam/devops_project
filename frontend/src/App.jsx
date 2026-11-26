@@ -1,38 +1,33 @@
-import { useEffect, useState } from 'react'
-import Steamer from './Steamer.jsx'
-import Logo from './Logo.jsx'
-import { varieties, chutneys, recipes } from './data.js'
-import credits from './credits.json'
+import { menuItems } from './menu.js'
 
-function useReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll('.reveal')
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in')
-            io.unobserve(e.target)
-          }
-        })
-      },
-      { threshold: 0.15 }
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
+function BrandMark() {
+  return (
+    <span className="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="23" fill="currentColor" />
+        <path d="M12 28c0-8 5-14 12-14s12 6 12 14v4H12z" fill="#fff3d8" />
+        <path d="M16 25c4-3 12-3 16 0M18 29c3-2 9-2 12 0" fill="none" stroke="#d88b31" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="24" cy="21" r="2" fill="#79442c" />
+      </svg>
+    </span>
+  )
 }
 
 function Header() {
   return (
     <header className="header">
       <div className="wrap header-inner">
-        <Logo size={42} />
-        <nav>
-          <a href="#varieties">Varieties</a>
-          <a href="#chutneys">Chutneys</a>
-          <a href="#recipes">Recipes</a>
-          <a href="#reviews">Reviews</a>
+        <a className="brand" href="#top" aria-label="Pani Puri House home">
+          <BrandMark />
+          <span className="brand-text">
+            <span className="brand-name">Pani Puri</span>
+            <span className="brand-sub">House of crunch</span>
+          </span>
+        </a>
+        <nav aria-label="Main navigation">
+          <a href="#menu">Our menu</a>
+          <a href="#story">Our story</a>
+          <a className="nav-cta" href="#visit">Come say hello <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
     </header>
@@ -42,223 +37,116 @@ function Header() {
 function Hero() {
   return (
     <section className="hero wrap" id="top">
-      <div className="hero-text">
-        <p className="eyebrow">Welcome to Sammy&rsquo;s Momo House</p>
-        <h1>Hand-folded, steamed, and served hot.</h1>
+      <div className="hero-copy">
+        <p className="eyebrow"><span className="eyebrow-dot" /> Fresh shells. Big flavour.</p>
+        <h1>A little crunch.<br /><span>A lot of joy.</span></h1>
         <p className="lead">
-          A small guide to momo: the kinds you'll find on the street, the
-          chutneys that go with them, and how to make a batch at home.
+          Meet your new favourite street snack: crisp puris, punchy pani,
+          and all the sweet, spicy, tangy bits in between.
         </p>
-        <div className="hero-links">
-          <a href="#varieties" className="btn">See the varieties</a>
-          <a href="#recipes" className="link">Jump to recipes &rarr;</a>
+        <a className="button" href="#menu">Explore the menu <span aria-hidden="true">↓</span></a>
+        <p className="hero-note">Made fresh, filled with love, eaten in one happy bite.</p>
+      </div>
+      <div className="hero-art" role="img" aria-label="Illustration of crispy pani puri with fresh herbs and chutneys">
+        <div className="art-sun" />
+        <div className="art-caption">THE<br />HAPPY<br />BITE</div>
+        <div className="plate">
+          <span className="puri puri-one" />
+          <span className="puri puri-two" />
+          <span className="puri puri-three" />
+          <span className="puri puri-four" />
+          <span className="puri puri-five" />
+          <span className="puri puri-six" />
+          <span className="chutney chutney-one" />
+          <span className="chutney chutney-two" />
+          <span className="herb herb-one" />
+          <span className="herb herb-two" />
         </div>
-      </div>
-      <div className="hero-art">
-        <Steamer />
-      </div>
-    </section>
-  )
-}
-
-function Varieties() {
-  return (
-    <section id="varieties" className="section wrap">
-      <div className="section-head reveal">
-        <h2>Varieties</h2>
-        <p>Same dumpling, many ways to cook it.</p>
-      </div>
-      <div className="grid">
-        {varieties.map((v, i) => (
-          <article key={v.name} className="card reveal" style={{ transitionDelay: `${(i % 4) * 60}ms` }}>
-            <div className="card-img">
-              <img src={`/images/${v.img}.jpg`} alt={v.name} loading="lazy" />
-            </div>
-            <div className="card-top">
-              <span className="num">{String(i + 1).padStart(2, '0')}</span>
-              <span className="tag">{v.tag}</span>
-            </div>
-            <h3>{v.name}</h3>
-            <p>{v.text}</p>
-          </article>
-        ))}
+        <span className="art-sticker">CRUNCH<br />HAPPY!</span>
+        <span className="art-sparkle sparkle-one">✳</span>
+        <span className="art-sparkle sparkle-two">✦</span>
       </div>
     </section>
   )
 }
 
-function Heat({ level }) {
+function Menu() {
   return (
-    <span className="heat" aria-label={`Heat ${level} of 3`}>
-      {[1, 2, 3].map((n) => (
-        <span key={n} className={n <= level ? 'dot on' : 'dot'} />
-      ))}
-    </span>
-  )
-}
-
-function Chutneys() {
-  return (
-    <section id="chutneys" className="section band">
+    <section id="menu" className="section menu-section">
       <div className="wrap">
-        <div className="section-head reveal">
-          <h2>Chutneys</h2>
-          <p>Momo without achar is only half a plate.</p>
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Good things, one puri at a time</p>
+            <h2>Pick your happy.</h2>
+          </div>
+          <p>Every plate comes with crisp puris and our freshly made pani. Choose your favourite kind of zing.</p>
         </div>
-        <div className="chutney-photos reveal">
-          <figure>
-            <img src="/images/jhol-achar.jpg" alt="Veg momo sitting in orange jhol achar" loading="lazy" />
-            <figcaption>Veg momo in jhol achar</figcaption>
-          </figure>
-          <figure>
-            <img src="/images/chutney.jpg" alt="Plate of momo with a bowl of red chilli chutney" loading="lazy" />
-            <figcaption>Homemade momo with chilli chutney</figcaption>
-          </figure>
-        </div>
-        <ul className="chutney-list">
-          {chutneys.map((c) => (
-            <li key={c.name} className="chutney reveal">
-              <div>
-                <h3>{c.name}</h3>
-                <span className="sub">{c.sub}</span>
+        <div className="menu-grid">
+          {menuItems.map((item, index) => (
+            <article className={`menu-card ${item.color}`} key={item.id}>
+              <div className="menu-card-top">
+                <span className="menu-number">{String(index + 1).padStart(2, '0')}</span>
+                <span className="menu-icon" aria-hidden="true">{item.icon}</span>
               </div>
-              <p>{c.text}</p>
-              <Heat level={c.heat} />
-            </li>
+              <p className="menu-label">{item.label}</p>
+              <h3>{item.name}</h3>
+              <p className="menu-description">{item.description}</p>
+              <div className="menu-card-bottom">
+                <span>{item.portion}</span>
+                <strong>₹{item.price}</strong>
+              </div>
+            </article>
           ))}
-        </ul>
+        </div>
+        <p className="menu-footnote">Have a favourite spice level? Just let us know when you order.</p>
       </div>
     </section>
   )
 }
 
-function Recipe({ r }) {
-  const [done, setDone] = useState([])
-  const toggle = (i) =>
-    setDone((d) => (d.includes(i) ? d.filter((x) => x !== i) : [...d, i]))
-
+function Story() {
   return (
-    <article className="recipe reveal">
-      <img className="recipe-img" src={`/images/${r.img}.jpg`} alt={r.name} loading="lazy" />
-      <header className="recipe-head">
-        <h3>{r.name}</h3>
-        <div className="meta">
-          <span>{r.time}</span>
-          <span>{r.serves}</span>
+    <section id="story" className="story-section">
+      <div className="wrap story-inner">
+        <div className="story-stamp" aria-hidden="true">
+          <span>MADE FRESH</span>
+          <strong>with<br />a little<br />extra love</strong>
+          <span>EVERY DAY</span>
         </div>
-      </header>
-      <div className="recipe-body">
-        <div>
-          <h4>Ingredients</h4>
-          <ul className="ingredients">
-            {r.ingredients.map((x) => (
-              <li key={x}>{x}</li>
-            ))}
-          </ul>
+        <div className="story-copy">
+          <p className="eyebrow">A tiny shell with a big heart</p>
+          <h2>Street-food magic,<br />served with a smile.</h2>
+          <p>
+            We believe the best snacks are the ones you share. So we make
+            every puri crisp, every pani bright, and every plate a little
+            celebration. Come hungry, leave happy.
+          </p>
+          <a className="text-link" href="#visit">Your next happy bite is waiting <span aria-hidden="true">→</span></a>
         </div>
-        <div>
-          <h4>Method</h4>
-          <ol className="steps">
-            {r.steps.map((s, i) => (
-              <li key={i} className={done.includes(i) ? 'done' : ''}>
-                <button type="button" onClick={() => toggle(i)} aria-pressed={done.includes(i)}>
-                  <span className="step-n">{i + 1}</span>
-                  <span>{s}</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-          <p className="hint">Tap a step to mark it done.</p>
+        <div className="story-doodle" aria-hidden="true">
+          <span className="doodle-puri doodle-one" />
+          <span className="doodle-puri doodle-two" />
+          <span className="doodle-puri doodle-three" />
+          <span className="doodle-leaf">✳</span>
         </div>
-      </div>
-    </article>
-  )
-}
-
-function Recipes() {
-  return (
-    <section id="recipes" className="section wrap">
-      <div className="section-head reveal">
-        <h2>Recipes</h2>
-        <p>Start with the dough, end with the achar.</p>
-      </div>
-      <div className="recipes">
-        {recipes.map((r) => (
-          <Recipe key={r.name} r={r} />
-        ))}
       </div>
     </section>
   )
 }
 
-function Reviews() {
-  const [reviews, setReviews] = useState([])
-  const [name, setName] = useState('')
-  const [review, setReview] = useState('')
-  const [status, setStatus] = useState('')
-
-  useEffect(() => {
-    fetch('/api/reviews')
-      .then((res) => res.json())
-      .then(setReviews)
-      .catch(() => setStatus('Could not load reviews.'))
-  }, [])
-
-  const submit = async (e) => {
-    e.preventDefault()
-    setStatus('')
-    const res = await fetch('/api/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, review }),
-    })
-    if (!res.ok) {
-      setStatus('Could not post your review. Please try again.')
-      return
-    }
-    const created = await res.json()
-    setReviews((r) => [created, ...r])
-    setName('')
-    setReview('')
-  }
-
+function Visit() {
   return (
-    <section id="reviews" className="section band">
-      <div className="wrap reviews">
-        <div className="section-head">
-          <h2>Reviews</h2>
-          <p>Tried our momo? Tell us what you thought.</p>
+    <section id="visit" className="visit-section">
+      <div className="wrap visit-inner">
+        <div>
+          <p className="eyebrow">Good food. Good mood.</p>
+          <h2>Make room<br />for one more?</h2>
         </div>
-        <form className="review-form" onSubmit={submit}>
-          <input
-            type="text"
-            placeholder="Your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            maxLength={60}
-            required
-          />
-          <textarea
-            placeholder="Your review"
-            value={review}
-            onChange={(e) => setReview(e.target.value)}
-            maxLength={500}
-            rows={4}
-            required
-          />
-          <button type="submit" className="btn">Post review</button>
-          {status && <p className="hint">{status}</p>}
-        </form>
-        <ul className="review-list">
-          {reviews.map((r) => (
-            <li key={r._id} className="review">
-              <p>{r.review}</p>
-              <span className="sub">
-                {r.name} &middot; {new Date(r.createdAt).toLocaleDateString()}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <div className="visit-copy">
+          <p>Bring your friends, bring your appetite. Your next plate of pani puri is ready when you are.</p>
+          <a className="button button-light" href="#menu">Find your favourite <span aria-hidden="true">↗</span></a>
+        </div>
+        <span className="visit-doodle" aria-hidden="true">☺</span>
       </div>
     </section>
   )
@@ -268,34 +156,29 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="wrap footer-inner">
-        <Logo size={48} className="brand-lg" />
-        <span>Made with flour, water and a lot of patience.</span>
+        <a className="brand footer-brand" href="#top" aria-label="Pani Puri House home">
+          <BrandMark />
+          <span className="brand-text">
+            <span className="brand-name">Pani Puri</span>
+            <span className="brand-sub">House of crunch</span>
+          </span>
+        </a>
+        <span>Made for the love of that first bite.</span>
+        <a href="#top" className="back-top">Back to top ↑</a>
       </div>
-      <details className="wrap credits">
-        <summary>Photo credits (Wikimedia Commons)</summary>
-        <ul>
-          {credits.map((c) => (
-            <li key={c.image}>
-              <a href={c.source} target="_blank" rel="noreferrer">{c.image}</a> by {c.author}, {c.license}
-            </li>
-          ))}
-        </ul>
-      </details>
     </footer>
   )
 }
 
 export default function App() {
-  useReveal()
   return (
     <>
       <Header />
       <main>
         <Hero />
-        <Varieties />
-        <Chutneys />
-        <Recipes />
-        <Reviews />
+        <Menu />
+        <Story />
+        <Visit />
       </main>
       <Footer />
     </>
