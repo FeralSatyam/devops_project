@@ -82,13 +82,35 @@ jobs:
       - name: Validate CloudFormation template
         run: aws cloudformation validate-template --template-body "file://$TEMPLATE"
 
+      - name: Clean up a previously failed stack creation
+        run: |
+          STACK_STATUS=$(aws cloudformation list-stacks \
+            --query "StackSummaries[?StackName=='$STACK_NAME'] | [0].StackStatus" \
+            --output text)
+          if [ "$STACK_STATUS" = "ROLLBACK_COMPLETE" ]; then
+            echo "Deleting failed stack creation before retrying."
+            aws cloudformation delete-stack --stack-name "$STACK_NAME"
+            aws cloudformation wait stack-delete-complete --stack-name "$STACK_NAME"
+          fi
+
       - name: Create or update EC2 stack
         run: |
+          deploy_status=0
           aws cloudformation deploy \
             --stack-name "$STACK_NAME" \
             --template-file "$TEMPLATE" \
             --parameter-overrides "InstanceType=${{ inputs.instance_type || 't3.small' }}" \
-            --no-fail-on-empty-changeset
+            --no-fail-on-empty-changeset || deploy_status=$?
+
+          if [ "$deploy_status" -ne 0 ]; then
+            echo "::group::Recent CloudFormation stack events"
+            aws cloudformation describe-stack-events \
+              --stack-name "$STACK_NAME" \
+              --query "StackEvents[0:20].[Timestamp,LogicalResourceId,ResourceType,ResourceStatus,ResourceStatusReason]" \
+              --output table
+            echo "::endgroup::"
+            exit "$deploy_status"
+          fi
 
       - name: Start instance and find its public IP
         id: instance
